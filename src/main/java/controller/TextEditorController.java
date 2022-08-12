@@ -4,8 +4,12 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
@@ -15,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.FileStore;
+import java.util.Optional;
 
 public class TextEditorController {
     public MenuItem mnuNew;
@@ -31,13 +36,22 @@ public class TextEditorController {
     public File savePath;
     public File openedFile;
     public byte[] data;
+    private String fileTypeIdentifier="anushka.dep9";
+    private byte[] fileTypeInitializer;
+    public String content="";
 
     public void initialize(){
+
+        /* Make File staring 12 bytes to identify .dep9 file type. */
+        fileTypeInitializer= fileTypeIdentifier.getBytes();
+
+
 
         mnuNew.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 txtHtmlEditor.setHtmlText("");
+
 
             }
         });
@@ -52,8 +66,8 @@ public class TextEditorController {
             public void handle(ActionEvent actionEvent) {
 
 
-                String str = txtHtmlEditor.getHtmlText();
-                data= str.getBytes();
+                content = txtHtmlEditor.getHtmlText();
+                data= content.getBytes();
 
                 FileChooser saveFileChooser= new FileChooser();
                 saveFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -76,8 +90,12 @@ public class TextEditorController {
                 }
                 try {
                     FileOutputStream fos =new FileOutputStream(file);
+                    for(byte b:fileTypeInitializer){
+                        fos.write(b^ 0xFF); //add 12 bytes front of the file
+                    }
+
                     for (byte b: data){
-                        fos.write(b);
+                        fos.write(b^ 0xFF);   //save inverted byte
                     }
                     fos.close();
                     txtHtmlEditor.setHtmlText("");
@@ -104,22 +122,47 @@ public class TextEditorController {
                     FileInputStream fis = new FileInputStream(openedFile);
                     int fileSize= (int) openedFile.length();
                     byte[] dat = new byte[fileSize];
+                    byte[] startingData= new byte[12];
 
-                    for(int i=0; i<fileSize;i++){
-                        dat[i]= (byte) fis.read();
+                    for(int j=0;j<12;j++){
+                        startingData[j]=(byte)(fis.read()^0xFF);     //take fist 12 bytes to identification
                     }
-                    fis.close();
-                    data=dat;
+                    String identifier= new String(startingData);
+                    if(identifier.equals(fileTypeIdentifier)) {
+                        for (int i = 0; i < fileSize - 13; i++) {
+                            dat[i] = (byte) (fis.read() ^ 0xFF);
+                        }
+                        fis.close();
+                        data = dat;
+                        String str =new String(data);
+                        content=str;
+                    }else{
+                        fis.close();
+                        Optional<ButtonType> result = new Alert(Alert.AlertType.INFORMATION,"Unsupported File. Do you want to open another file?",ButtonType.YES, ButtonType.NO).showAndWait();
+                        if (result.get() == ButtonType.YES) {
+                            mnuOpen.fire();
+                        }else if(result.get() == ButtonType.NO) {
+                            return;
+                        }
+
+                    }
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
 
 
-                String strr =new String(data);
-                txtHtmlEditor.setHtmlText(strr);
+
+                txtHtmlEditor.setHtmlText(content);
             }
         });
 
+        mnuPrint.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
 
     }
 }
