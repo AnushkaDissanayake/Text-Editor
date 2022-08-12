@@ -115,44 +115,62 @@ public class TextEditorController {
                 FileChooser openFileChooser = new FileChooser();
                 openFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
                 openFileChooser.setTitle("Select File");
-                openFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("dep9 (*.dep9*)", "*.dep9*"));
+                openFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("dep9 (*.dep9*)", "*.dep9*","*.*"));
                 openedFile = openFileChooser.showOpenDialog(txtHtmlEditor.getScene().getWindow());
-                System.out.println(openedFile.getAbsolutePath());
 
-                try {
-                    FileInputStream fis = new FileInputStream(openedFile);
-                    int fileSize= (int) openedFile.length();
-                    byte[] dat = new byte[fileSize];
-                    byte[] startingData= new byte[12];
+                if(openedFile!=null) {
+                    if(openedFile.getName().endsWith(".dep9")) {
+                        try {
+                            FileInputStream fis = new FileInputStream(openedFile);
+                            int fileSize = (int) openedFile.length();
+                            byte[] dat = new byte[fileSize];
+                            byte[] startingData = new byte[12];
 
-                    for(int j=0;j<12;j++){
-                        startingData[j]=(byte)(fis.read()^0xFF);     //take fist 12 bytes to identification
-                    }
-                    String identifier= new String(startingData);
-                    if(identifier.equals(fileTypeIdentifier)) {
-                        for (int i = 0; i < fileSize - 13; i++) {
-                            dat[i] = (byte) (fis.read() ^ 0xFF);
+                            for (int j = 0; j < 12; j++) {
+                                startingData[j] = (byte) (fis.read() ^ 0xFF);     //take fist 12 bytes to identification
+                            }
+                            String identifier = new String(startingData);
+                            if (identifier.equals(fileTypeIdentifier)) {
+                                for (int i = 0; i < fileSize - 13; i++) {
+                                    dat[i] = (byte) (fis.read() ^ 0xFF);
+                                }
+                                fis.close();
+                                data = dat;
+                                String str = new String(data);
+                                content = str;
+                            } else {
+                                fis.close();
+                                Optional<ButtonType> result = new Alert(Alert.AlertType.INFORMATION, "Unsupported File. Do you want to open another file?", ButtonType.YES, ButtonType.NO).showAndWait();
+                                if (result.get() == ButtonType.YES) {
+                                    mnuOpen.fire();
+                                } else if (result.get() == ButtonType.NO) {
+                                    return;
+                                }
+
+                            }
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                        fis.close();
-                        data = dat;
-                        String str =new String(data);
-                        content=str;
-                    }else{
-                        fis.close();
-                        Optional<ButtonType> result = new Alert(Alert.AlertType.INFORMATION,"Unsupported File. Do you want to open another file?",ButtonType.YES, ButtonType.NO).showAndWait();
-                        if (result.get() == ButtonType.YES) {
-                            mnuOpen.fire();
-                        }else if(result.get() == ButtonType.NO) {
-                            return;
-                        }
+                    }else {
+                        try {
+                            FileInputStream fis = new FileInputStream(openedFile);
+                            int fileSize = (int) openedFile.length();
+                            byte[] dat = new byte[fileSize];
+                            for (int i = 0; i < fileSize ; i++) {
+                                dat[i] = (byte) (fis.read());
+                            }
+                            fis.close();
+                            data = dat;
+                            String str = new String(data);
+                            content = str;
 
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
-
-
 
                 txtHtmlEditor.setHtmlText(content);
             }

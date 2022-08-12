@@ -1,5 +1,6 @@
 controller/TextEditorController$2.class
 controller/SplashScreenController$7.class
+controller/TextEditorController$9.class
 controller/SplashScreenController$2.class
 controller/SplashScreenController$9.class
 controller/SplashScreenController$10.class
@@ -7,7 +8,9 @@ controller/TextEditorController$4.class
 controller/SplashScreenController$5.class
 controller/SplashScreenController$3.class
 controller/TextEditorController$1.class
+controller/TextEditorController$6.class
 controller/TextEditorController.class
+controller/TextEditorController$8.class
 controller/SplashScreenController$8.class
 controller/TextEditorController$3.class
 controller/SplashScreenController$11.class
@@ -15,3 +18,4 @@ controller/SplashScreenController$6.class
 controller/SplashScreenController$1.class
 controller/SplashScreenController$4.class
 controller/TextEditorController$5.class
+controller/TextEditorController$7.class
