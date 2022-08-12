@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.MenuItem;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
@@ -160,7 +161,31 @@ public class TextEditorController {
         mnuPrint.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                ChoiceDialog dialog = new ChoiceDialog(Printer.getDefaultPrinter(), Printer.getAllPrinters());
+                dialog.setHeaderText("Choose the printer!");
+                dialog.setContentText("Choose a printer from available printers");
+                dialog.setTitle("Printer Choice");
+                Optional<Printer> opt = dialog.showAndWait();
+                if (opt.isPresent()) {
+                    Printer printer = opt.get();
+                    // start printing ...
+                }
+                if (Printer.getDefaultPrinter() == null){
+                    new Alert(Alert.AlertType.ERROR, "No default printer has been selected").showAndWait();
+                    return;
+                }
+                PrinterJob printerJob = PrinterJob.createPrinterJob();
+                if (printerJob != null){
+                    printerJob.showPageSetupDialog(txtHtmlEditor.getScene().getWindow());
+                    boolean success = printerJob.printPage(txtHtmlEditor);
+                    if (success){
+                        printerJob.endJob();
+                    }else{
+                        new Alert(Alert.AlertType.ERROR, "Failed to print, try again").show();
+                    }
+                }else{
+                    new Alert(Alert.AlertType.ERROR, "Failed to initialize a new printer job").show();
+                }
             }
         });
 
