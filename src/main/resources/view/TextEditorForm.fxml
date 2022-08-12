@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.web.HTMLEditor?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TextEditorController">
    <children>
       <MenuBar layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
@@ -45,34 +44,29 @@
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
-            <items>
-                  <MenuItem fx:id="mnuNew1" mnemonicParsing="false" text="New">
+               <items>
+                  <MenuItem fx:id="mnuCut" mnemonicParsing="false" text="Cut">
                      <accelerator>
-                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem fx:id="mnuOpen1" mnemonicParsing="false" text="Open">
+                  <MenuItem fx:id="mnuCopy" mnemonicParsing="false" text="Copy">
                      <accelerator>
-                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem fx:id="mnuSave1" mnemonicParsing="false" text="Save">
+                  <MenuItem fx:id="mnuPaste" mnemonicParsing="false" text="Paste">
                      <accelerator>
-                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator>
-                  </MenuItem>
-                  <MenuItem fx:id="mnuPrint1" mnemonicParsing="false" text="Print">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="mnuClose1" mnemonicParsing="false" text="Close">
+                  <MenuItem fx:id="mnuSelectAll" mnemonicParsing="false" text="Select All">
                      <accelerator>
-                        <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-            </items>
+               </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
@@ -81,7 +75,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <HTMLEditor htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutY="28.0" prefHeight="200.0" prefWidth="506.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+      <HTMLEditor fx:id="txtHtmlEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutY="28.0" prefHeight="200.0" prefWidth="506.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="27.0">
          <padding>
             <Insets top="2.0" />
          </padding>

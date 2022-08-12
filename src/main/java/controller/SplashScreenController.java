@@ -92,7 +92,7 @@ public class SplashScreenController {
                 recProgressBar.setWidth(recContainer.getWidth());
             }
         });
-        var keyFrame11 = new KeyFrame(Duration.millis(3300), new EventHandler<ActionEvent>() {
+        var keyFrame11 = new KeyFrame(Duration.millis(700), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
@@ -110,7 +110,7 @@ public class SplashScreenController {
                 }
             }
         });
-        timeline.getKeyFrames().addAll(keyFrame1, keyFrame2, keyFrame3, keyFrame4,keyFrame5, keyFrame6, keyFrame7, keyFrame8,keyFrame9, keyFrame10, keyFrame11);
+        timeline.getKeyFrames().addAll(keyFrame1/*, keyFrame2, keyFrame3, keyFrame4,keyFrame5, keyFrame6, keyFrame7, keyFrame8,keyFrame9, keyFrame10*/, keyFrame11);
         timeline.playFromStart();
 
     }
