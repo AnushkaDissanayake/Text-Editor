@@ -3,6 +3,7 @@ package controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
@@ -12,15 +13,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.FileStore;
 import java.util.Optional;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class TextEditorController {
     public MenuItem mnuNew;
@@ -37,6 +41,7 @@ public class TextEditorController {
     public File savePath;
     public File openedFile;
     public byte[] data;
+    public MenuItem mnuAbout;
     private String fileTypeIdentifier="anushka.dep9";
     private byte[] fileTypeInitializer;
     public String content="";
@@ -45,6 +50,8 @@ public class TextEditorController {
 
         /* Make File staring 12 bytes to identify .dep9 file type. */
         fileTypeInitializer= fileTypeIdentifier.getBytes();
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent clipBordContent = new ClipboardContent();
 
 
 
@@ -206,31 +213,57 @@ public class TextEditorController {
                 }
             }
         });
-
-        mnuCopy.setOnAction(new EventHandler<ActionEvent>() {
+        mnuAbout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                try {
+                    URL resource = this.getClass().getResource("/view/AboutForm.fxml");
+                    Parent container = FXMLLoader.load(resource);
+                    Scene scene = new Scene(container);
 
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setTitle("About");
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.show();
+                    stage.centerOnScreen();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
-        mnuCut.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
 
-            }
-        });
-        mnuPaste.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-            }
-        });
-        mnuSelectAll.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-            }
-        });
+//        mnuCopy.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//
+////                clipBordContent.putHtml(txtHtmlEditor.getHtmlText());
+////                clipboard.setContent(clipBordContent);
+////                txtHtmlEditor.getCursor();
+//
+//            }
+//        });
+//        mnuCut.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+////                clipBordContent.putHtml(txtHtmlEditor.getHtmlText());
+////                clipboard.setContent(clipBordContent);
+////                txtHtmlEditor.setHtmlText("");
+//            }
+//        });
+//        mnuPaste.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                //txtHtmlEditor.setHtmlText(txtHtmlEditor.getHtmlText()+clipboard.getHtml());
+//            }
+//        });
+//        mnuSelectAll.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//
+//
+//            }
+//        });
 
     }
 }
